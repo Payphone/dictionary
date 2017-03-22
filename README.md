@@ -10,7 +10,7 @@ git clone https://github.com/Payphone/dictionary.git
 mv dictionary ~/.stumpwm.d/modules/
 ```
 Now update your .stumpwmrc file to include the following (change the [YOUR KEY]
-to reflect you API key):
+portion to reflect your API key):
 ```
 (load-module "dictionary")
 (setf dictionary:*api-key* "[YOUR KEY]")
