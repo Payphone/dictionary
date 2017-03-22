@@ -1,11 +1,11 @@
 ;;;; dictionary.asd
 
 (asdf:defsystem #:dictionary
-  :description "A StumpWM module for dictionary lookups."
+  :description "A StumpWM module for looking up definitions in the
+               Merriam-Webster dictionary."
   :author "Peyton Farrar <peyton@peytonfarrar.com>"
   :license "MIT"
   :depends-on (#:plump
-               #:plump-sexp
                #:trivial-http
                #:stumpwm)
   :serial t

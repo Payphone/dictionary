@@ -2,4 +2,5 @@
 
 (defpackage #:dictionary
   (:use #:cl #:stumpwm)
-  (:export #:get-definition))
+  (:export #:get-definition
+           #:*api-key*))
