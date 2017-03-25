@@ -51,7 +51,7 @@
 (defcommand get-definition (word) ((:string "Look up what word? "))
   "Find the definition of a word."
   (handler-case
-      (let ((*TIMEOUT-WAIT* 45))
+      (let ((*suppress-echo-timeout* t))
         (message "~A: ~%~{~A~%~}" word
                  (word-definitions (word-lookup word *api-key*))))
     (no-definitions-found ()
