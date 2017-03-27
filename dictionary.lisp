@@ -48,7 +48,7 @@
                   (lastcar (trivial-http:http-get
                             (concatenate 'string "http://www.dictionaryapi.com/"
                                          "api/v1/references/collegiate/xml/" word
-                                         "?key=" key)) :timeout 5)))
+                                         "?key=" key)))))
       (error 'no-api-key)))
 
 (defcommand get-definition (word) ((:string "Look up what word? "))
@@ -62,5 +62,4 @@
     (no-api-key ()
       (message "You have not added an API key. You won't be able to look up
                definitions without this!"))
-    (t ()
-      (message "Can't connect to http://dictionaryapi.com"))))
+    (t () (message "Can't connect to http://dictionaryapi.com"))))
