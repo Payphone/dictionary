@@ -7,6 +7,7 @@
   http://dictionaryapi.com/")
 
 (define-condition no-definitions-found (error) ())
+(define-condition no-api-key (error) ())
 
 (defstruct word
   (name)
@@ -17,7 +18,7 @@
   (car (last list)))
 
 (defun breakup-long-string (string &optional (max-length 80))
-  "Inserts a newline after a the max length is reached."
+  "Inserts a newline after the max length is reached."
   (labels ((rec (list count acc)
              (let ((char (car list)))
                (if list
@@ -28,7 +29,7 @@
     (rec (coerce string 'list) 1 nil)))
 
 (defun get-definitions (node)
-  "Returns the first entry found."
+  "Returns all definition entries found."
   (or (plump:get-elements-by-tag-name node :dt)
       (error 'no-definitions-found)))
 
@@ -40,13 +41,15 @@
 
 (defun word-lookup (word key)
   "Searches for a word in the Merriam-Webster dictionary."
-  (make-word :name word
-             :definitions
-             (serialize-word
-              (lastcar (trivial-http:http-get
-                        (concatenate 'string "http://www.dictionaryapi.com/"
-                                     "api/v1/references/collegiate/xml/" word
-                                     "?key=" key))))))
+  (if key
+      (make-word :name word
+                 :definitions
+                 (serialize-word
+                  (lastcar (trivial-http:http-get
+                            (concatenate 'string "http://www.dictionaryapi.com/"
+                                         "api/v1/references/collegiate/xml/" word
+                                         "?key=" key)) :timeout 5)))
+      (error 'no-api-key)))
 
 (defcommand get-definition (word) ((:string "Look up what word? "))
   "Find the definition of a word."
@@ -55,4 +58,9 @@
         (message "~A: ~%~{~A~%~}" word
                  (word-definitions (word-lookup word *api-key*))))
     (no-definitions-found ()
-      (message (format nil "No known definitions for ~A." word)))))
+      (message (format nil "No known definitions for ~A." word)))
+    (no-api-key ()
+      (message "You have not added an API key. You won't be able to look up
+               definitions without this!"))
+    (t ()
+      (message "Can't connect to http://dictionaryapi.com"))))
